@@ -13,21 +13,11 @@ const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case types.CONTACT_ADD:
       const newID = uuid();
-      console.log({
-        contact: {
-          items: [
-            {
-              id: newID,
-              name: payload.name,
-              number: payload.number,
-            },
-          ],
-          ...state.contacts,
-        },
-      });
       return {
-        contact: {
+        contacts: {
+          ...state.contacts,
           items: [
+            ...state.contacts.items,
             {
               id: newID,
               name: payload.name,
@@ -35,13 +25,23 @@ const reducer = (state = initialState, { type, payload }) => {
             },
           ],
         },
-        ...state.contacts,
       };
     case types.CONTACT_DELETE:
       return {
-        contacts: state.contacts.filter(
-          (contact) => contact.id !== payload.contactID
-        ),
+        contacts: {
+          ...state.contacts,
+          items: state.contacts.items.filter(
+            (contact) => contact.id !== payload
+          ),
+        },
+      };
+
+    case types.CONTACT_FILTER:
+      return {
+        contacts: {
+          filter: payload.contactFilter,
+          ...state.contacts.items,
+        },
       };
     default:
       return state;

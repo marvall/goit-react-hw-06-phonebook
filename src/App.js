@@ -2,13 +2,16 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { contactDelete, contactAdd } from "./redux/actions/actions";
+import {
+  contactDelete,
+  contactAdd,
+  contactFiletr,
+} from "./redux/actions/actions";
 import ContactForm from "./components/ContactForm";
 import Filter from "./components/Filter";
 import ContactList from "./components/ContactList/ContactList";
 
-function App({ contacts, deleteContact, addContact }) {
-  console.log(contacts);
+function App({ contacts, deleteContact, addContact, filterContact }) {
   //addContact = (data) => {
   //  const { name, number } = data;
   //  if (this.isContactExist(name)) {
@@ -43,11 +46,12 @@ function App({ contacts, deleteContact, addContact }) {
   //  this.setState({ filter: event.currentTarget.value });
   //};
   const filterContacts = (contacts) => {
-    const { items, filter } = contacts;
-    if (filter !== "") {
-      return items.filter(({ name }) => name.includes(filter));
+    if (contacts.filter !== "") {
+      return contacts.items.filter(({ name }) =>
+        name.includes(contacts.filter)
+      );
     } else {
-      return items;
+      return contacts.items;
     }
   };
   ////========= life-cycle the component =========
@@ -69,10 +73,9 @@ function App({ contacts, deleteContact, addContact }) {
   return (
     <>
       <h1>Phonebook</h1>
-      {<ContactForm onSubmit={addContact} />}
-
+      <ContactForm onSubmit={addContact} />
       <h2>Contacts</h2>
-      {/* <Filter filter={filter} onFilter={this.filterHandler} /> */}
+      <Filter filter={contacts.filter} onFilter={filterContact} />
       <ContactList
         contacts={filterContacts(contacts)}
         onDelete={deleteContact}
@@ -87,9 +90,12 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteContact: () => dispatch(contactDelete()),
-    addContact: () =>
-      dispatch(contactAdd({ name: "Asdasd", number: "Adfasfasf" })),
+    deleteContact: (id) => {
+      console.log(id);
+      dispatch(contactDelete(id));
+    },
+    addContact: ({ name, number }) => dispatch(contactAdd({ name, number })),
+    filterContact: (filter) => dispatch(contactFiletr(filter)),
   };
 };
 

@@ -1,13 +1,12 @@
 import types from "../types/types";
-export const contactDelete = (contactID) => {
+export const contactDelete = (id) => {
   return {
     type: types.CONTACT_DELETE,
-    payload: contactID,
+    payload: id,
   };
 };
 
 export const contactAdd = (contact) => {
-  console.log(contact);
   return {
     type: types.CONTACT_ADD,
     payload: contact,
