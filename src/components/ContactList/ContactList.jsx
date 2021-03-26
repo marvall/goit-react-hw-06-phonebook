@@ -1,35 +1,35 @@
-import { Component } from "react";
+import { connect } from "react-redux";
 import Contact from "./Contact";
-import PropTypes from "prop-types";
 import Style from "./ContactList.module.scss";
 
-class ContactList extends Component {
-  render() {
-    const contacts = this.props.contacts;
-    const deleteContact = this.props.onDelete;
-    return (
-      <ul className={Style.contacrList}>
-        {contacts.map((contact) => (
-          <Contact
-            key={contact.id}
-            id={contact.id}
-            name={contact.name}
-            number={contact.number}
-            onDeleteContact={deleteContact}
-          />
-        ))}
-      </ul>
-    );
-  }
+function ContactList({ contacts }) {
+  const filterContacts = (contacts) => {
+    if (contacts.filter !== "") {
+      return contacts.items.filter(({ name }) =>
+        name.includes(contacts.filter)
+      );
+    } else {
+      return contacts.items;
+    }
+  };
+  return (
+    <ul className={Style.contacrList}>
+      {filterContacts(contacts).map((contact) => (
+        <Contact
+          key={contact.id}
+          id={contact.id}
+          name={contact.name}
+          number={contact.number}
+        />
+      ))}
+    </ul>
+  );
 }
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      number: PropTypes.string,
-    })
-  ).isRequired,
-  onDelete: PropTypes.func.isRequired,
+
+const mapStateToProps = (state) => {
+  return {
+    contacts: state.contacts,
+  };
 };
-export default ContactList;
+
+export default connect(mapStateToProps, null)(ContactList);

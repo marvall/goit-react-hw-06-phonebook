@@ -1,31 +1,33 @@
-import React, { Component } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import Style from "./Contact.module.scss";
+import { connect } from "react-redux";
+import { contactDelete } from "../../redux/contacts/contacts-actions";
 
-class Contact extends Component {
-  state = {
-    id: this.props.id,
-  };
-  render() {
-    const { id, name, number, onDeleteContact } = this.props;
-    return (
-      <li id={id} className={Style.contact}>
-        <p>{name}</p>
-        <p>{number}</p>
-        <button
-          className={Style.button}
-          onClick={() => onDeleteContact(this.state.id)}
-        >
-          delete
-        </button>
-      </li>
-    );
-  }
+function Contact({ id, name, number, deleteContact }) {
+  // eslint-disable-next-line no-unused-vars
+  const [currentID, setID] = useState(id);
+  return (
+    <li id={id} className={Style.contact}>
+      <p>{name}</p>
+      <p>{number}</p>
+      <button className={Style.button} onClick={() => deleteContact(currentID)}>
+        delete
+      </button>
+    </li>
+  );
 }
 Contact.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string,
   number: PropTypes.string,
-  onDeleteContact: PropTypes.func.isRequired,
+  deleteContact: PropTypes.func.isRequired,
 };
-export default Contact;
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteContact: (id) => dispatch(contactDelete(id)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Contact);

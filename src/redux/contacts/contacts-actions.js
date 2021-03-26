@@ -21,7 +21,7 @@ export const contactAdd = (contact) => {
 
 export const contactFiletr = (contactFilter) => {
   return {
-    type: types.CONTACT_FITER,
+    type: types.CONTACT_FILTER,
     payload: contactFilter,
   };
 };
