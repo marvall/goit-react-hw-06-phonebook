@@ -6,7 +6,7 @@ import {
   contactDelete,
   contactAdd,
   contactFiletr,
-} from "./redux/actions/actions";
+} from "./redux/contacts/contacts-actions";
 import ContactForm from "./components/ContactForm";
 import Filter from "./components/Filter";
 import ContactList from "./components/ContactList/ContactList";
@@ -90,10 +90,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteContact: (id) => {
-      console.log(id);
-      dispatch(contactDelete(id));
-    },
+    deleteContact: (id) => dispatch(contactDelete(id)),
     addContact: ({ name, number }) => dispatch(contactAdd({ name, number })),
     filterContact: (filter) => dispatch(contactFiletr(filter)),
   };

@@ -1,4 +1,6 @@
-import types from "../types/types";
+import types from "./contacts-types";
+import uuid from "react-uuid";
+
 export const contactDelete = (id) => {
   return {
     type: types.CONTACT_DELETE,
@@ -9,7 +11,11 @@ export const contactDelete = (id) => {
 export const contactAdd = (contact) => {
   return {
     type: types.CONTACT_ADD,
-    payload: contact,
+    payload: {
+      id: uuid(),
+      name: contact.name,
+      number: contact.number,
+    },
   };
 };
 
