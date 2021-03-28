@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { connect } from "react-redux";
 import { contactAdd } from "../redux/contacts/contacts-actions";
+import uuid from "react-uuid";
 import Style from "./ContactForm.module.scss";
 
 const isContactExist = (contactName, contacts) => {
@@ -22,8 +23,10 @@ function ContactForm({ contacts, addContact }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (isContactExist(name, contacts.items)) addContact({ name, number });
-    reset();
+    if (isContactExist(name, contacts.items)) {
+      addContact({ id: uuid(), name, number });
+      reset();
+    }
   };
   const handleChange = (event) => {
     if (event.currentTarget.name === "name") {
@@ -74,7 +77,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    addContact: ({ name, number }) => dispatch(contactAdd({ name, number })),
+    addContact: ({ id, name, number }) =>
+      dispatch(contactAdd({ id, name, number })),
   };
 };
 
